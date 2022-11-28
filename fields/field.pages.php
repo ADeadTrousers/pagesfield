@@ -37,7 +37,7 @@
 				}
 				$states = $filteredStates;
 			}
-			return empty($states) ? null : $filteredStates;
+			return empty($states) ? null : (isset($filteredStates) ? $filteredStates : null);
 		}
 
 		public function toggleFieldData(array $data, $newState, $entry_id = null){
@@ -359,9 +359,9 @@
 		public function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null){
 			$states = $this->getPossibleValues();
 
-			if(!is_array($data['handle'])) $data['handle'] = array($data['handle']);
-			if(!is_array($data['page_id'])) $data['page_id'] = array($data['page_id']);
-			if(!is_array($data['title'])) $data['title'] = array($data['title']);
+			if(!isset($data['handle']) || !is_array($data['handle'])) $data['handle'] = array($data['handle'] ?? '');
+			if(!isset($data['page_id']) || !is_array($data['page_id'])) $data['page_id'] = array($data['page_id'] ?? '');
+			if(!isset($data['title']) || !is_array($data['title'])) $data['title'] = array($data['title'] ?? '');
 
 			$options = array();
 			$values = array();
@@ -387,7 +387,7 @@
 			$fieldname = 'fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix;
 			if($this->get('allow_multiple_selection') == 'yes') $fieldname .= '[]';
 
-			$value = General::sanitize($data['url']);
+			$value = General::sanitize($data['url'] ?? '');
 			$label = Widget::Label($this->get('label'));
 
 			// not required and unique label
